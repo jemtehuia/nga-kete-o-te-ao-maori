@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ngā Kete o te Ao Māori</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-image: url("background.png");
+      background-size: cover;
+      background-position: top center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+      }
+    }
+
+    .side-panel {
+      display: none;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 48px;
+      overflow-y: auto;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    @media (max-width: 768px) {
+      .main {
+        padding: 16px;
+        justify-content: flex-start;
+      }
+    }
+
+    .topbar {
+      position: absolute;
+      top: 32px;
+      right: 48px;
+    }
+
+    .top-nav {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 64px);
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .top-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: flex-end;
+      flex: 1;
+    }
+
+    .bottom-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .bottom-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .bottom-logo:hover {
+      transform: scale(1.1);
+      filter: brightness(1.1);
+    }
+
+    .bottom-logo:active {
+      transform: scale(1.05);
+    }
+
+    @keyframes chip-glow {
+      0%, 100% {
+        box-shadow: 0 4px 16px rgba(200, 66, 217, 0.3),
+                    0 0 10px rgba(30, 184, 190, 0.3);
+      }
+      50% {
+        box-shadow: 0 8px 32px rgba(200, 66, 217, 0.6),
+                    0 0 30px rgba(30, 184, 190, 0.6);
+      }
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 rgba(200, 66, 217, 0.7);
+      }
+      100% {
+        box-shadow: 0 0 0 15px rgba(200, 66, 217, 0);
+      }
+    }
+
+    .chip {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #1eb8be;
+      text-decoration: none;
+      color: #f4e100;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 2.5px solid #c842d9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 15px;
+      line-height: 1.2;
+      position: relative;
+    }
+
+    .chip::before {
+      content: '';
+      position: absolute;
+      top: -2.5px;
+      left: -2.5px;
+      right: -2.5px;
+      bottom: -2.5px;
+      border-radius: 50%;
+      background: transparent;
+      transition: all 0.4s ease;
+    }
+
+    .chip:hover {
+      transform: scale(1.15) translateY(-4px);
+      animation: chip-glow 1.5s ease-in-out infinite, pulse-ring 1.5s ease-out infinite;
+      filter: brightness(1.2);
+    }
+
+    .chip:active {
+      transform: scale(1.1) translateY(-2px);
+    }
+
+    .toggle {
+      cursor: pointer;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #1eb8be;
+      color: #f4e100;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2.5px solid #c842d9;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 15px;
+      line-height: 1.2;
+      position: relative;
+    }
+
+    .toggle::before {
+      content: '';
+      position: absolute;
+      top: -2.5px;
+      left: -2.5px;
+      right: -2.5px;
+      bottom: -2.5px;
+      border-radius: 50%;
+      background: transparent;
+      transition: all 0.4s ease;
+    }
+
+    .toggle:hover {
+      transform: scale(1.15) translateY(-4px);
+      animation: chip-glow 1.5s ease-in-out infinite, pulse-ring 1.5s ease-out infinite;
+      filter: brightness(1.2);
+    }
+
+    .toggle:active {
+      transform: scale(1.1) translateY(-2px);
+    }
+
+    .hero {
+      max-width: 900px;
+      margin-bottom: 48px;
+      margin-top: 150px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        margin-top: 24px;
+        margin-bottom: 32px;
+      }
+    }
+
+    .hero h1 {
+      font-size: 41px;
+      margin-bottom: 16px;
+      margin-top: 48px;
+      color: #ffffff;
+      font-weight: 700;
+      line-height: 1.2;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 24px;
+        margin-top: 16px;
+        margin-bottom: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 20px;
+      }
+    }
+
+    .hero p {
+      font-size: 19px;
+      color: #f4e100;
+      line-height: 1.6;
+      font-weight: 400;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+      margin-top: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .hero p {
+        font-size: 16px;
+        margin-top: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero p {
+        font-size: 14px;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 24px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 2px;
+      width: 100%;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 22px 14px;
+      border-radius: 16px;
+      color: white;
+      text-decoration: none;
+      font-size: 19px;
+      font-weight: 700;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 79px;
+      background-position: center;
+      background-size: cover;
+      background-blend-mode: overlay;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-main {
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .btn-sub {
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      mix-blend-mode: overlay;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn:active {
+      transform: translateY(-4px) scale(1.01);
+    }
+
+    @keyframes glow-teal {
+      0%, 100% {
+        filter: brightness(1) drop-shadow(0 0 5px rgba(30, 184, 190, 0.3));
+      }
+      50% {
+        filter: brightness(1.2) drop-shadow(0 0 20px rgba(30, 184, 190, 0.8));
+      }
+    }
+
+    @keyframes glow-purple {
+      0%, 100% {
+        filter: brightness(1) drop-shadow(0 0 5px rgba(200, 66, 217, 0.3));
+      }
+      50% {
+        filter: brightness(1.2) drop-shadow(0 0 20px rgba(200, 66, 217, 0.8));
+      }
+    }
+
+    @keyframes sparkle {
+      0%, 100% {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+                    0 0 10px rgba(244, 225, 0, 0.4);
+      }
+      50% {
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25),
+                    0 0 30px rgba(244, 225, 0, 0.8);
+      }
+    }
+
+    .reo {
+      background: linear-gradient(135deg, rgba(30, 184, 190, 0.85) 0%, rgba(21, 153, 158, 0.85) 100%);
+      border: 3px solid #f4e100;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reo::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 140px;
+      height: 140px;
+      background-image: url('Reo copy.PNG');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.5;
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7))
+              drop-shadow(0 0 25px rgba(30, 184, 190, 0.8));
+      animation: emboss-float 6s ease-in-out infinite, emboss-pulse 3s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes emboss-float {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+      }
+      50% {
+        transform: translate(-50%, -52%) scale(1.05) rotate(2deg);
+      }
+    }
+
+    @keyframes emboss-pulse {
+      0%, 100% {
+        opacity: 0.5;
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7))
+                drop-shadow(0 0 25px rgba(30, 184, 190, 0.8));
+      }
+      50% {
+        opacity: 0.7;
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9))
+                drop-shadow(0 0 35px rgba(30, 184, 190, 1));
+      }
+    }
+
+    .reo .btn-main {
+      color: #c842d9;
+      font-weight: 900;
+      position: relative;
+      z-index: 1;
+      text-shadow:
+        -1px -1px 0 white,
+        1px -1px 0 white,
+        -1px 1px 0 white,
+        1px 1px 0 white;
+    }
+
+    .reo .btn-sub {
+      position: relative;
+      z-index: 1;
+    }
+
+    .reo:hover {
+      animation: glow-teal 1.5s ease-in-out infinite;
+      box-shadow: 0 12px 32px rgba(30, 184, 190, 0.4);
+    }
+
+    .reo:hover::before {
+      animation: emboss-float 6s ease-in-out infinite, emboss-pulse 3s ease-in-out infinite, emboss-rotate 8s linear infinite;
+    }
+
+    @keyframes emboss-rotate {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .haka {
+      background: linear-gradient(135deg, rgba(200, 66, 217, 0.85) 0%, rgba(176, 43, 199, 0.85) 100%);
+      border: 3px solid #f4e100;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .haka::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      background-image: url('assets/Ahua.PNG');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.35;
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6))
+              drop-shadow(0 0 25px rgba(200, 66, 217, 0.7));
+      animation: emboss-wave 5s ease-in-out infinite, emboss-glow-purple 3s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes emboss-wave {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.08) rotateY(10deg);
+      }
+    }
+
+    @keyframes emboss-glow-purple {
+      0%, 100% {
+        opacity: 0.35;
+        filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6))
+                drop-shadow(0 0 25px rgba(200, 66, 217, 0.7));
+      }
+      50% {
+        opacity: 0.55;
+        filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.8))
+                drop-shadow(0 0 35px rgba(200, 66, 217, 0.9))
+                drop-shadow(0 0 50px rgba(176, 43, 199, 0.6));
+      }
+    }
+
+    .haka .btn-main,
+    .haka .btn-sub {
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .haka:hover {
+      animation: glow-purple 1.5s ease-in-out infinite;
+      box-shadow: 0 12px 32px rgba(200, 66, 217, 0.4);
+    }
+
+    .haka:hover::before {
+      animation: emboss-wave 5s ease-in-out infinite, emboss-glow-purple 3s ease-in-out infinite, emboss-spin 10s linear infinite;
+    }
+
+    @keyframes emboss-spin {
+      0% { transform: translate(-50%, -50%) rotateZ(0deg); }
+      100% { transform: translate(-50%, -50%) rotateZ(-360deg); }
+    }
+
+    .kaupapa {
+      background: linear-gradient(135deg, rgba(244, 225, 0, 0.85) 0%, rgba(230, 213, 0, 0.85) 100%);
+      color: #0d7a7f;
+      border: 3px solid #c842d9;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kaupapa::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      background-image: url('assets/Tirohanga.PNG');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.4;
+      filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5))
+              drop-shadow(0 0 25px rgba(200, 66, 217, 0.6));
+      animation: emboss-bounce 4s ease-in-out infinite, emboss-glow-yellow 3.5s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes emboss-bounce {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      25% {
+        transform: translate(-50%, -48%) scale(1.05);
+      }
+      50% {
+        transform: translate(-50%, -52%) scale(0.98);
+      }
+      75% {
+        transform: translate(-50%, -49%) scale(1.03);
+      }
+    }
+
+    @keyframes emboss-glow-yellow {
+      0%, 100% {
+        opacity: 0.4;
+        filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5))
+                drop-shadow(0 0 25px rgba(200, 66, 217, 0.6));
+      }
+      50% {
+        opacity: 0.6;
+        filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7))
+                drop-shadow(0 0 35px rgba(200, 66, 217, 0.8))
+                drop-shadow(0 0 45px rgba(244, 225, 0, 0.4));
+      }
+    }
+
+    .kaupapa .btn-main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .kaupapa .btn-sub {
+      position: relative;
+      z-index: 1;
+    }
+
+    .kaupapa:hover {
+      animation: sparkle 1.5s ease-in-out infinite;
+    }
+
+    .kaupapa:hover::before {
+      animation: emboss-bounce 4s ease-in-out infinite, emboss-glow-yellow 3.5s ease-in-out infinite, emboss-wobble 6s ease-in-out infinite;
+    }
+
+    @keyframes emboss-wobble {
+      0%, 100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      25% {
+        transform: translate(-50%, -50%) rotate(-5deg) scale(1.02);
+      }
+      50% {
+        transform: translate(-50%, -50%) rotate(5deg) scale(0.98);
+      }
+      75% {
+        transform: translate(-50%, -50%) rotate(-3deg) scale(1.01);
+      }
+    }
+
+    .mi { display: none; }
+
+    body.maori .en { display: none; }
+    body.maori .mi { display: inline; }
+
+    @media (max-width: 1024px) {
+      .main {
+        padding: 24px 32px;
+      }
+
+      .topbar {
+        top: 24px;
+        right: 32px;
+      }
+
+      .chip, .toggle {
+        width: 80px;
+        height: 80px;
+        font-size: 11px;
+        border: 2px solid #c842d9;
+      }
+
+      .bottom-logo {
+        width: 80px;
+        height: 80px;
+      }
+
+      .hero h1 {
+        font-size: 29px;
+      }
+
+      .buttons {
+        gap: 16px;
+      }
+
+      .btn {
+        padding: 18px 12px;
+        font-size: 18px;
+        min-height: 68px;
+      }
+
+      .btn-main {
+        font-size: 20px;
+      }
+
+      .btn-sub {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .topbar {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-bottom: 24px;
+      }
+
+      .top-nav {
+        align-items: center;
+        height: auto;
+        gap: 16px;
+      }
+
+      .top-left {
+        align-items: center;
+        flex-direction: row;
+        gap: 12px;
+      }
+
+      .chip, .toggle {
+        width: 70px;
+        height: 70px;
+        font-size: 10px;
+        border: 1.5px solid #c842d9;
+        padding: 8px;
+      }
+
+      .bottom-logo {
+        width: 70px;
+        height: 70px;
+      }
+
+      .buttons {
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .btn {
+        padding: 20px 16px;
+        font-size: 17px;
+        min-height: 80px;
+      }
+
+      .btn-main {
+        font-size: 19px;
+      }
+
+      .btn-sub {
+        font-size: 11px;
+      }
+
+      .reo::before {
+        width: 100px;
+        height: 100px;
+      }
+
+      .haka::before, .kaupapa::before {
+        width: 140px;
+        height: 140px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .chip, .toggle {
+        width: 60px;
+        height: 60px;
+        font-size: 8px;
+        padding: 6px;
+      }
+
+      .bottom-logo {
+        width: 60px;
+        height: 60px;
+      }
+
+      .top-left {
+        gap: 8px;
+      }
+
+      .btn {
+        padding: 18px 14px;
+        min-height: 70px;
+      }
+
+      .btn-main {
+        font-size: 17px;
+      }
+
+      .btn-sub {
+        font-size: 10px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="side-panel"></div>
+
+  <div class="main">
+
+    <div class="topbar">
+
+      <div class="top-nav">
+        <div class="toggle" onclick="toggleLang()">
+          <span class="en">English</span>
+          <span class="mi">Māori</span>
+        </div>
+
+        <div class="top-left">
+          <a class="chip" href="guidetoncea.pdf" target="_blank">
+            <span class="en">Guide to NCEA</span>
+            <span class="mi">Aratohu NCEA</span>
+          </a>
+          <a class="chip" href="#">
+            <span class="en">Huinga Ako</span>
+            <span class="mi">Huinga Ako</span>
+          </a>
+          <a class="chip" href="#">
+            <span class="en">Online Classes</span>
+            <span class="mi">Akomanga Ipurangi</span>
+          </a>
+        </div>
+
+        <a class="bottom-logo" href="https://tekura.desire2learn.com/d2l/login?sessionExpired=0&target=%2fd2l%2fhome" target="_blank">
+          <img src="Letterhead_2.png" alt="Te Kura">
+        </a>
+      </div>
+
+    </div>
+
+    <div class="hero">
+      <h1>
+        <span class="en">Welcome to the Te Aka Taumatua - Ngā Kete o Te Ao Māori: Te Ara Pāhake's landing page</span>
+        <span class="mi">Nau mai ki te whārangi taunga o Te Aka Taumatua - Ngā Kete o Te Ao Māori: Te Ara Pāhake</span>
+      </h1>
+
+      <p>
+        <span class="en">
+          Learning that fits your world. This space brings together Te Reo Māori, Kaupapa Māori, and Te Ao Haka.
+        </span>
+        <span class="mi">
+          He ako e hāngai ana ki tō ao. Ka whakakotahi tēnei wāhi i Te Reo Māori, Kaupapa Māori, me Te Ao Haka.
+        </span>
+      </p>
+    </div>
+
+    <div class="buttons">
+
+      <a class="btn reo" href="te-reo-maori.html">
+        <span class="btn-main">
+          <span class="en">Te Reo</span>
+          <span class="mi">Te Reo Māori</span>
+        </span>
+        <span class="btn-sub">Te Kete Tuatahi</span>
+      </a>
+
+      <a class="btn haka" href="te-ao-haka.html">
+        <span class="btn-main">
+          <span class="en">Te Ao Haka</span>
+          <span class="mi">Te Ao Haka</span>
+        </span>
+        <span class="btn-sub">Te Kete Tuarua</span>
+      </a>
+
+      <a class="btn kaupapa" href="kaupapa-maori.html">
+        <span class="btn-main">
+          <span class="en">Kaupapa Māori</span>
+          <span class="mi">Ngā Kaupapa Māori</span>
+        </span>
+        <span class="btn-sub">Te Kete Tuatoru</span>
+      </a>
+
+    </div>
+
+  </div>
+
+  <script>
+    function toggleLang() {
+      document.body.classList.toggle("maori");
+    }
+  </script>
+
+</body>
+</html>
