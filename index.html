@@ -74,7 +74,6 @@
       flex: 1;
     }
 
-
     @keyframes chip-glow {
       0%, 100% {
         box-shadow: 0 4px 16px rgba(200, 66, 217, 0.3),
@@ -665,6 +664,93 @@
     body.maori .en { display: none; }
     body.maori .mi { display: inline; }
 
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 32px;
+      border-radius: 18px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+
+    .login-box h1 {
+      margin-bottom: 12px;
+      color: #0d7a7f;
+      font-size: 28px;
+    }
+
+    .login-box p {
+      margin-bottom: 16px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      font-size: 16px;
+      border: 1px solid #bbb;
+      border-radius: 10px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      background: #1eb8be;
+      color: white;
+      cursor: pointer;
+    }
+
+    .login-box button:hover {
+      filter: brightness(1.05);
+    }
+
+    .login-message {
+      margin-top: 12px;
+      color: #b00020;
+      font-weight: 600;
+      min-height: 24px;
+    }
+
+  .logout-wrap {
+  position: fixed;
+  bottom: 30px;
+  right: 140px; /* moved left so it doesn’t clash with MTK button */
+  z-index: 1000;
+}
+
+.logout-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(13, 122, 127, 0.95);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+.logout-btn:hover {
+  filter: brightness(1.05);
+}
+
     @media (max-width: 1024px) {
       .main {
         padding: 24px 32px;
@@ -681,7 +767,6 @@
         font-size: 11px;
         border: 2px solid #c842d9;
       }
-
 
       .hero h1 {
         font-size: 29px;
@@ -763,7 +848,6 @@
         width: 100px;
         height: 100px;
       }
-
     }
 
     @media (max-width: 480px) {
@@ -795,114 +879,187 @@
       .btn-sub {
         font-size: 10px;
       }
+	/* Force Kaupapa Māori hover text to white */
+.btn.kaupapa:hover .hover-text,
+.btn.kaupapa:hover .hover-text span,
+.btn.kaupapa:hover .hover-text .en,
+.btn.kaupapa:hover .hover-text .mi {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9) !important;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+}
+}
     }
-
   </style>
 </head>
 
 <body>
+  <div id="loginScreen" class="login-screen">
+    <div class="login-box">
+      <h1>Kaiako Login</h1>
+      <p>Enter your kaiako password to continue.</p>
+      <input type="password" id="passwordInput" placeholder="Enter password" />
+      <button onclick="checkPassword()">Enter</button>
+      <p id="loginMessage" class="login-message"></p>
+    </div>
+  </div>
 
-  <div class="side-panel"></div>
+  <div id="siteContent" style="display: none; width: 100%;">
+    <div class="side-panel"></div>
 
-  <div class="main">
+    <div class="main">
+      <div class="topbar">
+        <div class="top-nav">
+          <div class="toggle" onclick="toggleLang()">
+            <span class="en">English</span>
+            <span class="mi">Māori</span>
+          </div>
 
-    <div class="topbar">
+          <div class="top-left">
+            <a class="chip" href="guidetoncea.pdf" target="_blank">
+              <span class="en">Guide to NCEA</span>
+              <span class="mi">Aratohu NCEA</span>
+            </a>
+            <a class="chip" href="#">
+              <span class="en">Huinga Ako</span>
+              <span class="mi">Huinga Ako</span>
+            </a>
+            <a class="chip" href="#">
+              <span class="en">Online Classes</span>
+              <span class="mi">Akomanga Ipurangi</span>
+            </a>
+          </div>
 
-      <div class="top-nav">
-        <div class="toggle" onclick="toggleLang()">
-          <span class="en">English</span>
-          <span class="mi">Māori</span>
+          <a class="chip" href="https://tekura.desire2learn.com/d2l/login?sessionExpired=0&target=%2fd2l%2fhome" target="_blank">
+            <span class="en">MTK Login</span>
+            <span class="mi">Takiuru MTK</span>
+          </a>
         </div>
-
-        <div class="top-left">
-          <a class="chip" href="guidetoncea.pdf" target="_blank">
-            <span class="en">Guide to NCEA</span>
-            <span class="mi">Aratohu NCEA</span>
-          </a>
-          <a class="chip" href="#">
-            <span class="en">Huinga Ako</span>
-            <span class="mi">Huinga Ako</span>
-          </a>
-          <a class="chip" href="#">
-            <span class="en">Online Classes</span>
-            <span class="mi">Akomanga Ipurangi</span>
-          </a>
-        </div>
-
-        <a class="chip" href="https://tekura.desire2learn.com/d2l/login?sessionExpired=0&target=%2fd2l%2fhome" target="_blank">
-          <span class="en">MTK Login</span>
-          <span class="mi">Takiuru MTK</span>
-        </a>
       </div>
 
+      <div class="hero">
+        <h1>
+          <span class="en">Welcome to the Te Aka Taumatua - Ngā Kete o Te Ao Māori: Te Ara Pāhake's landing page</span>
+          <span class="mi">Nau mai ki te whārangi taunga o Te Aka Taumatua - Ngā Kete o Te Ao Māori: Te Ara Pāhake</span>
+        </h1>
+
+        <p>
+          <span class="en">
+            Learning that fits your world. This space brings together Te Reo Māori, Kaupapa Māori, and Te Ao Haka.
+          </span>
+          <span class="mi">
+            He ako e hāngai ana ki tō ao. Ka whakakotahi tēnei wāhi i Te Reo Māori, Kaupapa Māori, me Te Ao Haka.
+          </span>
+        </p>
+      </div>
+
+      <div class="buttons">
+        <a class="btn reo" href="te-reo-maori.html">
+          <span class="btn-main">
+            <span class="en">Te Reo Māori</span>
+            <span class="mi">Te Reo Māori</span>
+          </span>
+          <span class="btn-sub">Te Kete Tuatahi</span>
+          <img src="assets/Reo copy.PNG" alt="Te Reo" class="hover-image">
+          <span class="hover-text">
+            <span class="en">Matua Rīhari is the Kaiako matua</span>
+            <span class="mi">Ko matua Rīhari te kaiako matua</span>
+          </span>
+        </a>
+
+        <a class="btn haka" href="te-ao-haka.html">
+          <span class="btn-main">
+            <span class="en">Te Ao Haka</span>
+            <span class="mi">Te Ao Haka</span>
+          </span>
+          <span class="btn-sub">Te Kete Tuarua</span>
+          <img src="assets/Ahua.PNG" alt="Te Ao Haka" class="hover-image">
+          <span class="hover-text">
+            <span class="en">Whaea Eline is the Kaiako matua</span>
+            <span class="mi">Ko whaea Eline te kaiako matua</span>
+          </span>
+        </a>
+
+        <a class="btn kaupapa" href="kaupapa-maori.html">
+          <span class="btn-main">
+            <span class="en">Kaupapa Māori</span>
+            <span class="mi">Ngā Kaupapa Māori</span>
+          </span>
+          <span class="btn-sub">Te Kete Tuatoru</span>
+          <img src="assets/Tirohanga.PNG" alt="Kaupapa Māori" class="hover-image">
+     <span class="hover-text" style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">
+  <span class="en" style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">Matua Fraesar is the Kaiako matua</span>
+  <span class="mi" style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">Ko matua Fraesar te kaiako matua</span>
+</span>
+        </a>
+      </div>
     </div>
 
-    <div class="hero">
-      <h1>
-        <span class="en">Welcome to the Te Aka Taumatua - Ngā Kete o Te Ao Māori: Te Ara Pāhake's landing page</span>
-        <span class="mi">Nau mai ki te whārangi taunga o Te Aka Taumatua - Ngā Kete o Te Ao Māori: Te Ara Pāhake</span>
-      </h1>
-
-      <p>
-        <span class="en">
-          Learning that fits your world. This space brings together Te Reo Māori, Kaupapa Māori, and Te Ao Haka.
-        </span>
-        <span class="mi">
-          He ako e hāngai ana ki tō ao. Ka whakakotahi tēnei wāhi i Te Reo Māori, Kaupapa Māori, me Te Ao Haka.
-        </span>
-      </p>
+    <div class="logout-wrap">
+      <button class="logout-btn" onclick="logoutKaiako()">Log out</button>
     </div>
-
-    <div class="buttons">
-
-      <a class="btn reo" href="te-reo-maori.html">
-        <span class="btn-main">
-          <span class="en">Te Reo Māori</span>
-          <span class="mi">Te Reo Māori</span>
-        </span>
-        <span class="btn-sub">Te Kete Tuatahi</span>
-        <img src="assets/Reo copy.PNG" alt="Te Reo" class="hover-image">
-        <span class="hover-text">
-          <span class="en">Matua Rīhari is the Kaiako matua</span>
-          <span class="mi">Ko matua Rīhari te kaiako matua</span>
-        </span>
-      </a>
-
-      <a class="btn haka" href="te-ao-haka.html">
-        <span class="btn-main">
-          <span class="en">Te Ao Haka</span>
-          <span class="mi">Te Ao Haka</span>
-        </span>
-        <span class="btn-sub">Te Kete Tuarua</span>
-        <img src="assets/Ahua.PNG" alt="Te Ao Haka" class="hover-image">
-        <span class="hover-text">
-          <span class="en">Whaea Eline is the Kaiako matua</span>
-          <span class="mi">Ko whaea Eline te kaiako matua</span>
-        </span>
-      </a>
-
-      <a class="btn kaupapa" href="kaupapa-maori.html">
-        <span class="btn-main">
-          <span class="en">Kaupapa Māori</span>
-          <span class="mi">Ngā Kaupapa Māori</span>
-        </span>
-        <span class="btn-sub">Te Kete Tuatoru</span>
-        <img src="assets/Tirohanga.PNG" alt="Kaupapa Māori" class="hover-image">
-        <span class="hover-text">
-          <span class="en">Matua Fraesar is the Kaiako matua</span>
-          <span class="mi">Ko matua Fraesar te kaiako matua</span>
-        </span>
-      </a>
-
-    </div>
-
   </div>
 
   <script>
+    const kaiakoPasswords = {
+      "kaiako1": "Aho2026",
+      "kaiako2": "Waiata2026",
+      "admin": "ManaKaiako2026"
+    };
+
     function toggleLang() {
       document.body.classList.toggle("maori");
     }
-  </script>
 
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value.trim();
+      const message = document.getElementById("loginMessage");
+
+      let matchedUser = null;
+
+      for (const user in kaiakoPasswords) {
+        if (kaiakoPasswords[user] === input) {
+          matchedUser = user;
+          break;
+        }
+      }
+
+      if (matchedUser) {
+        localStorage.setItem("kaiakoLoggedIn", "true");
+        localStorage.setItem("kaiakoUser", matchedUser);
+
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("siteContent").style.display = "block";
+        message.textContent = "";
+      } else {
+        message.textContent = "Incorrect password. Please try again.";
+      }
+    }
+
+    function logoutKaiako() {
+      localStorage.removeItem("kaiakoLoggedIn");
+      localStorage.removeItem("kaiakoUser");
+      location.reload();
+    }
+
+    window.onload = function () {
+      const loggedIn = localStorage.getItem("kaiakoLoggedIn");
+
+      if (loggedIn === "true") {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("siteContent").style.display = "block";
+      }
+    };
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && document.getElementById("loginScreen").style.display !== "none") {
+        checkPassword();
+      }
+    });
+  </script>
 </body>
 </html>
